@@ -10,12 +10,10 @@ class App extends React.Component {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
         {
-          id: 0,
           username: "Bob",
           content: "Has anyone seen my marbles?"
         },
         {
-          id: 1,
           username: "Anonymous",
           content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
         }
@@ -23,25 +21,9 @@ class App extends React.Component {
     }
   }
 
-  handleNewMessage(msg) {
-    const newMessage = {id: 2, username: "Michelle", content: msg};
-    const messages = this.state.messages.concat(newMessage)
-    this.setState({messages: messages})
-    this.socket.send(JSON.stringify(newMessage))
-  }
-
-  componentDidMount() {
-    var ws = new WebSocket ("ws://localhost:3001")
-
-    this.socket = ws;
-
-    ws.onopen = (ev) => {
-      console.log("Connected to server!");
-
-      ws.send(JSON.stringify(this.state))
-    }
-
-
+  newMessage(message) {
+    const messages = this.state.messages.concat(message);
+    this.setState({messages})
   }
 
   render() {
@@ -53,9 +35,36 @@ class App extends React.Component {
         <ChatBar
           currentUser={this.state.currentUser}
           messages={this.state.messages}
-          handleNewMessage={this.handleNewMessage.bind(this)}/>
+          newMessage={this.newMessage.bind(this)}
+        />
       </div>
     );
   }
 }
 export default App;
+
+
+
+// handleNewMessage(msg) {
+//   const newMessage = {id: 2, username: "Michelle", content: msg};
+//   const messages = this.state.messages.concat(newMessage)
+//   this.setState({messages: messages})
+//   this.socket.send(JSON.stringify(newMessage))
+// }
+//
+// componentDidMount() {
+//   var ws = new WebSocket ("ws://localhost:3001")
+//
+//   this.socket = ws;
+//
+//   ws.onopen = (ev) => {
+//     console.log("Connected to server!");
+//
+//     ws.send(JSON.stringify(this.state))
+//   }
+//
+//
+// }
+
+// Plug into ChatBar to revert
+// handleNewMessage={this.handleNewMessage.bind(this)}/>

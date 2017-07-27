@@ -9,7 +9,7 @@ class MessageList extends React.Component {
     return (
       <main className="messages">
         { messages }
-        <div className="message system"></div>
+        <div className="message system"/>
       </main>
     )
   }
