@@ -24,32 +24,36 @@ class App extends React.Component {
   }
 
   handleNewMessage(msg) {
-    const newMessage = {id: 7, username: "Michelle", content: msg};
+    const newMessage = {id: 2, username: "Michelle", content: msg};
     const messages = this.state.messages.concat(newMessage)
-    // Update the state of the app component.
-    // Calling setState will trigger a call to render() in App and all child components.
     this.setState({messages: messages})
+    this.socket.send(JSON.stringify(newMessage))
   }
 
   componentDidMount() {
-    console.log("componentDidMount <App />");
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
-      const newMessage = {id: 2, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage)
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages})
-    }, 3000);
+    var ws = new WebSocket ("ws://localhost:3001")
+
+    this.socket = ws;
+
+    ws.onopen = (ev) => {
+      console.log("Connected to server!");
+
+      ws.send(JSON.stringify(this.state))
+    }
+
+
   }
 
   render() {
     return (
       <div>
         <Header/>
-        <MessageList messages = {this.state.messages}/>
-        <ChatBar currentUser={this.state.currentUser} messages={this.state.messages} handleNewMessage={this.handleNewMessage.bind(this)}/>
+        <MessageList
+          messages = {this.state.messages}/>
+        <ChatBar
+          currentUser={this.state.currentUser}
+          messages={this.state.messages}
+          handleNewMessage={this.handleNewMessage.bind(this)}/>
       </div>
     );
   }
