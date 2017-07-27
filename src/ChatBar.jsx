@@ -10,7 +10,11 @@ class ChatBar extends React.Component {
   }
 
   addMessage(message) {
-    let post = {username: this.props.currentUser.name, content: message.message}
+    if (message.username === '') {
+      message.username = 'Anonymous'
+    }
+
+    let post = {username: message.username, content: message.message}
     this.props.newMessage(post)
   }
 
@@ -22,7 +26,7 @@ class ChatBar extends React.Component {
           onBlur={(event) => {
             this.state.username = event.target.value
           }}
-          defaultValue="Anonymous"/>
+        />
         <input
           className="chatbar-message"
           placeholder="Type a message and hit ENTER"
