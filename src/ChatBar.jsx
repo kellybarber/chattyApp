@@ -5,8 +5,18 @@ class ChatBar extends React.Component {
     super(props);
     this.state = {
       username: "",
-      message: ""
+      message: "",
     }
+  }
+
+  addStatus (oldName, newName) {
+    let prevName = oldName
+    if (prevName === '') {
+      prevName = 'Anonymous'
+    }
+
+    let post = {oldName: prevName, newName: newName, type: 'postMessage'}
+    this.props.newMessage(post)
   }
 
   addMessage(message) {
@@ -24,7 +34,10 @@ class ChatBar extends React.Component {
         <input className="chatbar-username"
           placeholder="Your Name (Optional)"
           onBlur={(event) => {
+            const oldName = this.state.username
             this.state.username = event.target.value
+            const newName = this.state.username
+            this.addStatus(oldName, newName)
           }}
         />
         <input
@@ -34,9 +47,9 @@ class ChatBar extends React.Component {
             if (event.key === 'Enter') {
               this.state.message = event.target.value
               this.addMessage(this.state)
+              event.target.value = ''
             }
           }}
-
         />
       </footer>
     )

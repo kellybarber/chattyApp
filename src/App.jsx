@@ -7,10 +7,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // currentUser: {name: "Bob"},
       messages: []
     }
   }
+
 
   componentDidMount() {
     const wss = new WebSocket('ws://localhost:3001')
@@ -21,15 +21,16 @@ class App extends React.Component {
     }
 
     wss.onmessage = (event) => {
-      console.log(event);
+      let parsedMessage = JSON.parse(event.data)
+      if (!parsedMessage.type) {
+        let messages = this.state.messages.concat(parsedMessage);
+        this.setState({messages})
+      }
     }
-
   }
 
   newMessage(message) {
     const lastMessage = message;
-    const messages = this.state.messages.concat(message);
-    this.setState({messages})
     this.wss.send(JSON.stringify(lastMessage))
   }
 
