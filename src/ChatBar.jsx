@@ -10,13 +10,17 @@ class ChatBar extends React.Component {
   }
 
   addStatus (oldName, newName) {
-    let prevName = oldName
-    if (prevName === '') {
-      prevName = 'Anonymous'
-    }
+    if (oldName === newName) {
+      return
+    } else {
+      let prevName = oldName
+      if (prevName === '') {
+        prevName = 'Anonymous'
+      }
 
-    let post = {oldName: prevName, newName: newName, type: 'postMessage'}
-    this.props.newMessage(post)
+      let post = {oldName: prevName, newName: newName, type: 'postNotification'}
+      this.props.newMessage(post)
+    }
   }
 
   addMessage(message) {
@@ -24,7 +28,7 @@ class ChatBar extends React.Component {
       message.username = 'Anonymous'
     }
 
-    let post = {username: message.username, content: message.message}
+    let post = {username: message.username, content: message.message, type: 'postMessage'}
     this.props.newMessage(post)
   }
 
@@ -56,17 +60,3 @@ class ChatBar extends React.Component {
   }
 }
 export default ChatBar
-
-// value={this.state.message}
-
-// handleChange(event) {
-//   if (event.key === "Enter") {
-//     this.props.handleNewMessage(this.state.message)
-//   } else if (event.key === "Backspace") {
-//     this.setState({message: this.state.message.substring(0, this.state.message.length - 1)})
-//   } else {
-//     this.setState({message: this.state.message + event.key})
-//   }
-// }
-
-// onKeyUp={this.handleChange.bind(this)}

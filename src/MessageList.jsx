@@ -1,15 +1,20 @@
-import React from 'react';
+import React from 'react'
 import Message from './Message.jsx'
+import Notification from './Notification.jsx'
 
 class MessageList extends React.Component {
   render() {
     const messages = this.props.messages.map((value, index) => {
-      return <Message key={index} message={value}/>
+      if (value.type === 'incomingMessage') {
+        return <Message key={index} message={value}/>
+      } else {
+        return <Notification key={index} message={value}/>
+      }
     })
     return (
       <main className="messages">
         { messages }
-        <div className="message system"/>
+        
       </main>
     )
   }

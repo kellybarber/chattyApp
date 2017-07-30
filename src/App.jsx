@@ -7,10 +7,10 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: []
+      messages: [],
+      userCount: ''
     }
   }
-
 
   componentDidMount() {
     const wss = new WebSocket('ws://localhost:3001')
@@ -22,22 +22,27 @@ class App extends React.Component {
 
     wss.onmessage = (event) => {
       let parsedMessage = JSON.parse(event.data)
-      if (!parsedMessage.type) {
-        let messages = this.state.messages.concat(parsedMessage);
+      if (parsedMessage.type === 'incomingMessage') {
+        let messages = this.state.messages.concat(parsedMessage)
         this.setState({messages})
+      } else {
+        this.state.userCount = parsedMessage
+        this.forceUpdate()
       }
     }
   }
 
   newMessage(message) {
-    const lastMessage = message;
+    const lastMessage = message
     this.wss.send(JSON.stringify(lastMessage))
   }
 
   render() {
     return (
       <div>
-        <Header/>
+        <Header
+          userCount = {this.state.userCount}
+        />
         <MessageList
           messages = {this.state.messages}/>
         <ChatBar
